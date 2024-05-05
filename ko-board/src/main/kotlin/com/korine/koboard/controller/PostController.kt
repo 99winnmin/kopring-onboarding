@@ -8,31 +8,30 @@ import java.time.LocalDateTime
 
 @RestController
 class PostController {
-
     @GetMapping("/posts/{id}")
     fun getPost(
-        @PathVariable id: Long
+        @PathVariable id: Long,
     ): PostDetailResponse {
         return PostDetailResponse(
             id = 1L,
             title = "title",
             content = "content",
             createdBy = "createdBy",
-            createdAt = LocalDateTime.now()
+            createdAt = LocalDateTime.now(),
         )
     }
 
     @GetMapping("/posts")
     fun getPosts(
         pageable: Pageable,
-        postSearchRequest: PostSearchRequest
+        postSearchRequest: PostSearchRequest,
     ): Page<PostSummaryResponse> {
         return Page.empty()
     }
 
     @PostMapping("/posts")
     fun createPost(
-        @RequestBody postCreateRequest: PostCreateRequest
+        @RequestBody postCreateRequest: PostCreateRequest,
     ): Long {
         return 1L
     }
@@ -40,7 +39,7 @@ class PostController {
     @PutMapping("/posts/{id}")
     fun updatePost(
         @PathVariable id: Long,
-        @RequestBody postUpdateRequest: PostUpdateRequest
+        @RequestBody postUpdateRequest: PostUpdateRequest,
     ): Long {
         return 1L
     }
@@ -48,7 +47,7 @@ class PostController {
     @DeleteMapping("/posts/{id}")
     fun deletePost(
         @PathVariable id: Long,
-        @RequestParam createdBy: String
+        @RequestParam createdBy: String,
     ): Long {
         return 1L
     }
