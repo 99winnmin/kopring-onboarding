@@ -1,13 +1,16 @@
 package com.korine.koboard.controller
 
 import com.korine.koboard.dto.*
+import com.korine.koboard.service.PostService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
 
 @RestController
-class PostController {
+class PostController(
+    private val postService: PostService,
+) {
     @GetMapping("/posts/{id}")
     fun getPost(
         @PathVariable id: Long,
@@ -33,7 +36,7 @@ class PostController {
     fun createPost(
         @RequestBody postCreateRequest: PostCreateRequest,
     ): Long {
-        return 1L
+        return postService.createPost(postCreateRequest.toDto())
     }
 
     @PutMapping("/posts/{id}")
@@ -41,7 +44,7 @@ class PostController {
         @PathVariable id: Long,
         @RequestBody postUpdateRequest: PostUpdateRequest,
     ): Long {
-        return 1L
+        return postService.updatePost(id, postUpdateRequest.toDto())
     }
 
     @DeleteMapping("/posts/{id}")
@@ -49,6 +52,6 @@ class PostController {
         @PathVariable id: Long,
         @RequestParam createdBy: String,
     ): Long {
-        return 1L
+        return postService.deletePost(id, createdBy)
     }
 }
