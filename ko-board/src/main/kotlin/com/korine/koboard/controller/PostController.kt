@@ -5,7 +5,6 @@ import com.korine.koboard.service.PostService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.web.bind.annotation.*
-import java.time.LocalDateTime
 
 @RestController
 class PostController(
@@ -15,13 +14,7 @@ class PostController(
     fun getPost(
         @PathVariable id: Long,
     ): PostDetailResponse {
-        return PostDetailResponse(
-            id = 1L,
-            title = "title",
-            content = "content",
-            createdBy = "createdBy",
-            createdAt = LocalDateTime.now(),
-        )
+        return postService.getPost(id).toResponse()
     }
 
     @GetMapping("/posts")
@@ -29,7 +22,7 @@ class PostController(
         pageable: Pageable,
         postSearchRequest: PostSearchRequest,
     ): Page<PostSummaryResponse> {
-        return Page.empty()
+        return postService.getPageBy(pageable, postSearchRequest.toDto()).toResponse()
     }
 
     @PostMapping("/posts")
