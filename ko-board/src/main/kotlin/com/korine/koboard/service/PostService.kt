@@ -3,9 +3,9 @@ package com.korine.koboard.service
 import com.korine.koboard.exception.PostNotDeletableException
 import com.korine.koboard.exception.PostNotFoundException
 import com.korine.koboard.repository.PostRepository
-import com.korine.koboard.service.dto.PostCreateRequestDto
-import com.korine.koboard.service.dto.PostUpdateRequestDto
-import com.korine.koboard.service.dto.toEntity
+import com.korine.koboard.service.dto.*
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -33,5 +33,13 @@ class PostService(
         if(post.createdBy != deletedBy) throw PostNotDeletableException()
         postRepository.deleteById(id)
         return id
+    }
+
+    fun getPost(id: Long) : PostDetailResponseDto {
+        return postRepository.findByIdOrNull(id)?.toDetailResponseDto() ?: throw PostNotFoundException()
+    }
+
+    fun getPageBy(pageable: Pageable, postSearchRequestDto: PostSearchRequestDto) : Page<PostSummaryResponseDto> {
+        return postRepository.findPageBy(pageable, postSearchRequestDto).toSummaryResponseDto()
     }
 }
