@@ -1,4 +1,4 @@
-package com.korine.koboard.dto
+package com.korine.koboard.controller.dto
 
 import com.korine.koboard.service.dto.PostDetailResponseDto
 
