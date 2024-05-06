@@ -1,6 +1,6 @@
 package com.korine.koboard.controller
 
-import com.korine.koboard.dto.*
+import com.korine.koboard.controller.dto.*
 import com.korine.koboard.service.PostService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
