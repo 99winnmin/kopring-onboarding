@@ -1,9 +1,11 @@
 package com.korine.koboard.service
 
+import com.korine.koboard.domain.Comment
 import com.korine.koboard.domain.Post
 import com.korine.koboard.exception.PostNotDeletableException
 import com.korine.koboard.exception.PostNotFoundException
 import com.korine.koboard.exception.PostNotUpdatableException
+import com.korine.koboard.repository.CommentRepository
 import com.korine.koboard.repository.PostRepository
 import com.korine.koboard.service.dto.PostCreateRequestDto
 import com.korine.koboard.service.dto.PostSearchRequestDto
@@ -22,6 +24,7 @@ import org.springframework.data.repository.findByIdOrNull
 class PostServiceTest(
     private val postService: PostService,
     private val postRepository: PostRepository,
+    private val commentRepository: CommentRepository
 ) : BehaviorSpec({
     beforeSpec {
         postRepository.saveAll(
@@ -154,6 +157,22 @@ class PostServiceTest(
         When("조회할 게시글이 없을 때"){
             then("게시글 없다는 예외가 발생한다."){
                 shouldThrow<PostNotFoundException> { postService.getPost(9999L) }
+            }
+        }
+
+        When("댓글 추가시") {
+            commentRepository.save(Comment(content = "댓글 내용1", post = saved, createdBy = "댓글 작성자"))
+            commentRepository.save(Comment(content = "댓글 내용2", post = saved, createdBy = "댓글 작성자"))
+            commentRepository.save(Comment(content = "댓글 내용3", post = saved, createdBy = "댓글 작성자"))
+            val post = postService.getPost(saved.id)
+            then("댓글이 함께 조회됨을 확인한다.") {
+                post.comments.size shouldBe 3
+                post.comments[0].content shouldBe "댓글 내용1"
+                post.comments[1].content shouldBe "댓글 내용2"
+                post.comments[2].content shouldBe "댓글 내용3"
+                post.comments[0].createdBy shouldBe "댓글 작성자"
+                post.comments[1].createdBy shouldBe "댓글 작성자"
+                post.comments[2].createdBy shouldBe "댓글 작성자"
             }
         }
     }
