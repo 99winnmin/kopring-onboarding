@@ -1,4 +1,11 @@
+server:
+    tomcat:
+      mbeanregistry:
+        enabled: true
 spring:
+    application:
+        name: board
+
     datasource:
         url: jdbc:mysql://localhost:3306/board?useSSL=false&serverTimezone=Asia/Seoul
         username: root
@@ -7,8 +14,23 @@ spring:
     jpa:
         hibernate:
             ddl-auto: update
-        show-sql: true
+        show-sql: false
         properties:
             hibernate:
-                format_sql: true
+                format_sql: false
                 default_batch_fetch_size: 100
+
+management:
+    endpoint:
+        metrics:
+            enabled: true
+        prometheus:
+            enabled: true
+    endpoints:
+        web:
+            exposure:
+                include: health, info, metrics, prometheus
+
+    metrics:
+        tags:
+          application: ${spring.application.name}
